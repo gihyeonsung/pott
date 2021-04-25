@@ -61,6 +61,9 @@ func main() {
 		if !strings.HasSuffix(filename, ".txt") {
 			continue
 		}
-		build(filename)
+
+		if build(filename) != nil {
+			fmt.Fprintf(os.Stderr, "could not build the input document: %s", err.Error())
+		}
 	}
 }
