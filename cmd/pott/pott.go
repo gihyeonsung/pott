@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/gihyeonsung/pott/internal/parser"
 	"github.com/gihyeonsung/pott/internal/renderer"
@@ -56,6 +57,10 @@ func main() {
 	}
 
 	for _, file := range files {
-		build(file.Name())
+		filename := file.Name()
+		if !strings.HasSuffix(filename, ".txt") {
+			continue
+		}
+		build(filename)
 	}
 }
