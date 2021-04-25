@@ -13,5 +13,5 @@ func Parse(r io.Reader) (*model.TextDocument, error) {
 	if err != nil {
 		return nil, errors.New("could not read the text document: " + err.Error())
 	}
-	return model.NewTextDocument(string(content)), nil
+	return &model.TextDocument{Content: string(content)}, nil
 }
