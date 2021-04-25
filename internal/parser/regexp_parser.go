@@ -17,15 +17,15 @@ func Parse(r io.Reader) (*model.TextDocument, error) {
 		return nil, errors.New("could not read the text document: " + err.Error())
 	}
 
-	h3, err := regexp.Compile(`(=== [^=]* ===)`)
-	h2, err := regexp.Compile(`(== [^=]* ==)`)
-	h1, err := regexp.Compile(`(= [^=]* =)`)
-	ref, err := regexp.Compile(`(\[\[[^]]*\]\])`)
-	b, err := regexp.Compile(`(\*\*[^\*]*\*\*)`)
-	i, err := regexp.Compile(`(//[^/]*//)`)
-	u, err := regexp.Compile("(__[^_]*__)")
-	s, err := regexp.Compile("(--[^-]*--)")
-	pre, err := regexp.Compile("(``[^`]*``)")
+	h3, _ := regexp.Compile(`(=== [^=]* ===)`)
+	h2, _ := regexp.Compile(`(== [^=]* ==)`)
+	h1, _ := regexp.Compile(`(= [^=]* =)`)
+	ref, _ := regexp.Compile(`(\[\[[^]]*\]\])`)
+	b, _ := regexp.Compile(`(\*\*[^\*]*\*\*)`)
+	i, _ := regexp.Compile(`(//[^/]*//)`)
+	u, _ := regexp.Compile("(__[^_]*__)")
+	s, _ := regexp.Compile("(--[^-]*--)")
+	pre, _ := regexp.Compile("(``[^`]*``)")
 
 	content = h3.ReplaceAllFunc(content, func(m []byte) []byte {
 		t := string(m)
