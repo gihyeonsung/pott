@@ -18,6 +18,16 @@ func Parse(r io.Reader) (*model.TextDocument, error) {
 		return nil, errors.New("could not read the text document: " + err.Error())
 	}
 
+	newlines, err := regexp.Compile(`\n+`)
+	content = newlines.ReplaceAll(content, []byte("\n"))
+
+	p, err := regexp.Compile(`(?m)^[^=].*?$`)
+	content = p.ReplaceAllFunc(content, func(m []byte) []byte {
+		t := string(m)
+		t = fmt.Sprintf("<p>%s</p>", t)
+		return []byte(t)
+	})
+
 	h3, _ := regexp.Compile(`(=== [^=]* ===)`)
 	h2, _ := regexp.Compile(`(== [^=]* ==)`)
 	h1, _ := regexp.Compile(`(= [^=]* =)`)
