@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net/url"
 	"regexp"
 
 	"github.com/gihyeonsung/pott/internal/model"
@@ -44,7 +45,14 @@ func Parse(r io.Reader) (*model.TextDocument, error) {
 	})
 	content = ref.ReplaceAllFunc(content, func(m []byte) []byte {
 		t := string(m)
-		t = fmt.Sprintf("<a href=\"%s\">%s</a>", t[2:len(t)-2], t[2:len(t)-2])
+		t = t[2 : len(t)-2]
+
+		loc := t
+		if _, err := url.ParseRequestURI(loc); err != nil {
+			loc = loc + ".txt.html"
+		}
+
+		t = fmt.Sprintf("<a href=\"%s\">%s</a>", loc, t)
 		return []byte(t)
 	})
 	content = b.ReplaceAllFunc(content, func(m []byte) []byte {
