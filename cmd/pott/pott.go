@@ -29,7 +29,10 @@ func build(filename string) error {
 		return errors.New("could not parse the document: " + err.Error())
 	}
 
-	outputPath := path.Join(outputDir, filename+".html")
+	outputPath := path.Join(
+		outputDir,
+		strings.TrimSuffix(filename, path.Ext(filename))+".html",
+	)
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return errors.New("could not create an output file: " + err.Error())

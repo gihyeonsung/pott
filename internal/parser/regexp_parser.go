@@ -59,7 +59,7 @@ func Parse(r io.Reader) (*model.TextDocument, error) {
 
 		loc := t
 		if _, err := url.ParseRequestURI(loc); err != nil {
-			loc = loc + ".txt.html"
+			loc = loc + ".html"
 		}
 
 		t = fmt.Sprintf("<a href=\"%s\">%s</a>", loc, t)
