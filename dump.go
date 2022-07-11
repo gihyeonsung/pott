@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func write(c *category, out string) error {
+func dump(c *category, out string) error {
 	log.Printf("write: dumping c=%+v out=%+v", c, out)
 	dir := filepath.Join(out, c.name)
 	if err := os.MkdirAll(dir, 0777); err != nil {
@@ -21,7 +21,7 @@ func write(c *category, out string) error {
 	}
 
 	for _, inner := range c.inners {
-		if err := write(inner, dir); err != nil {
+		if err := dump(inner, dir); err != nil {
 			return err
 		}
 	}

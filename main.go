@@ -85,7 +85,7 @@ func main() {
 		log.Panicf("main: %+v", err.Error())
 	}
 
-	if err := write(c, *pathBuild); err != nil {
+	if err := dump(c, *pathBuild); err != nil {
 		log.Panicf("main: %+v", err.Error())
 	}
 	log.Printf("all processes complete")
