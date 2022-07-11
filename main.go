@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"io/ioutil"
 	"log"
@@ -164,7 +163,26 @@ func build(c *category) error {
 }
 
 func write(c *category, out string) error {
-	return errors.New("not implemented")
+	log.Printf("write: dumping c=%+v out=%+v", c, out)
+	dir := filepath.Join(out, c.name)
+	if err := os.MkdirAll(dir, 0777); err != nil {
+		return err
+	}
+
+	for _, doc := range c.docs {
+		path := filepath.Join(dir, doc.name+".html")
+		if err := os.WriteFile(path, []byte(doc.content), 0777); err != nil {
+			return err
+		}
+	}
+
+	for _, inner := range c.inners {
+		if err := write(inner, dir); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func main() {
@@ -175,5 +193,9 @@ func main() {
 	log.Printf("flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
 	c, _ := read(*pathContent)
 	build(c)
+	if err := write(c, *pathBuild); err != nil {
+		log.Panicf("main: %+v", err.Error())
+	}
+
 	log.Printf("%+v", c.inners[0].docs[0])
 }
