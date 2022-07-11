@@ -81,7 +81,7 @@ func main() {
 		log.Panicf("main: %+v", err.Error())
 	}
 
-	if err := build(c); err != nil {
+	if err := build(c, *pathLayout, *pathCss); err != nil {
 		log.Panicf("main: %+v", err.Error())
 	}
 
