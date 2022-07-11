@@ -61,8 +61,7 @@ type document struct {
 	raw     []byte
 	title   string
 	content string
-	created string
-	updated string
+	date    string
 }
 
 type file struct {

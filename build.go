@@ -58,15 +58,9 @@ func buildDocument(d *document, tmpl *template.Template, css string) error {
 		}
 	}
 
-	if created, ok := metadata["created"]; ok {
-		if created, ok := created.(string); ok {
-			d.created = created
-		}
-	}
-
-	if updated, ok := metadata["updated"]; ok {
-		if updated, ok := updated.(string); ok {
-			d.created = updated
+	if date, ok := metadata["date"]; ok {
+		if date, ok := date.(string); ok {
+			d.date = date
 		}
 	}
 
@@ -75,13 +69,13 @@ func buildDocument(d *document, tmpl *template.Template, css string) error {
 
 	var content strings.Builder
 	tmpl.Execute(&content, &struct {
-		Title   string
-		Created string
-		Body    template.HTML
+		Title string
+		Date  string
+		Body  template.HTML
 	}{
-		Title:   d.title,
-		Created: d.created,
-		Body:    template.HTML(body.String()),
+		Title: d.title,
+		Date:  d.date,
+		Body:  template.HTML(body.String()),
 	})
 	d.content = content.String()
 

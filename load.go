@@ -36,10 +36,6 @@ func load(root string) (*category, error) {
 				d := &document{}
 				d.name = base
 				d.raw, _ = os.ReadFile(path)
-				d.title = "undefined"
-				d.content = "undefined"
-				d.created = "undefined"
-				d.updated = "undefined"
 				rootCategory.insertDoc(dirs, d)
 			} else {
 				f := &file{}
