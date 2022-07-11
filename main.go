@@ -8,6 +8,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/text"
 )
 
 type category struct {
@@ -64,10 +69,10 @@ func (c *category) insertFile(dirs []string, f *file) {
 type document struct {
 	name    string
 	raw     []byte
-	title   *string
-	content *string
-	created *string
-	updated *string
+	title   string
+	content string
+	created string
+	updated string
 }
 
 type file struct {
@@ -103,6 +108,10 @@ func read(root string) (*category, error) {
 				d := &document{}
 				d.name = base
 				d.raw, _ = ioutil.ReadFile(path)
+				d.title = "undefined"
+				d.content = "undefined"
+				d.created = "undefined"
+				d.updated = "undefined"
 				rootCategory.insertDoc(dirs, d)
 			} else {
 				f := &file{}
@@ -121,11 +130,41 @@ func read(root string) (*category, error) {
 }
 
 func build(c *category) error {
-	return errors.New("not implemented")
+	for _, doc := range c.docs {
+		markdown := goldmark.New(goldmark.WithExtensions(meta.Meta))
+		ctx := parser.NewContext()
+		ast := markdown.Parser().Parse(text.NewReader(doc.raw), parser.WithContext(ctx))
+		metadata := meta.Get(ctx)
+
+		doc.title = "no title"
+
+		var content strings.Builder
+		markdown.Renderer().Render(&content, doc.raw, ast)
+		doc.content = content.String()
+
+		log.Printf("metamadata=%+v", metadata)
+		if created, ok := metadata["created"]; ok {
+			if created, ok := created.(string); ok {
+				doc.created = created
+			}
+		}
+
+		if updated, ok := metadata["updated"]; ok {
+			if updated, ok := updated.(string); ok {
+				doc.created = updated
+			}
+		}
+	}
+
+	for _, inner := range c.inners {
+		build(inner)
+	}
+
+	return nil
 }
 
-func write(c *category) (*category, error) {
-	return nil, errors.New("not implemented")
+func write(c *category, out string) error {
+	return errors.New("not implemented")
 }
 
 func main() {
@@ -135,5 +174,6 @@ func main() {
 	pathCss := flag.String("stylesheet", "index.css", "stylesheet location")
 	log.Printf("flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
 	c, _ := read(*pathContent)
-	log.Printf("%+v", c)
+	build(c)
+	log.Printf("%+v", c.inners[0].docs[0])
 }
