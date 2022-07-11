@@ -191,11 +191,18 @@ func main() {
 	pathLayout := flag.String("template", "layout.tmpl", "template location")
 	pathCss := flag.String("stylesheet", "index.css", "stylesheet location")
 	log.Printf("flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
-	c, _ := read(*pathContent)
-	build(c)
-	if err := write(c, *pathBuild); err != nil {
+
+	c, err := read(*pathContent)
+	if err != nil {
 		log.Panicf("main: %+v", err.Error())
 	}
 
-	log.Printf("%+v", c.inners[0].docs[0])
+	if err := build(c); err != nil {
+		log.Panicf("main: %+v", err.Error())
+	}
+
+	if err := write(c, *pathBuild); err != nil {
+		log.Panicf("main: %+v", err.Error())
+	}
+	log.Printf("all processes complete")
 }
