@@ -6,18 +6,25 @@ import (
 	"path/filepath"
 )
 
-func dump(c *category, cssPath, out string) error {
-	os.MkdirAll(out, 0777)
-	css, err := os.ReadFile(cssPath)
+func cp(src, dst string) error {
+	if err := os.MkdirAll(filepath.Dir(dst), 0777); err != nil {
+		return err
+	}
+
+	bs, err := os.ReadFile(src)
 	if err != nil {
 		return err
 	}
 
-	cssPathOut := filepath.Join(out, filepath.Base(cssPath))
-	if err := os.WriteFile(cssPathOut, []byte(css), 0666); err != nil {
+	if err := os.WriteFile(dst, bs, 0666); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func dump(c *category, cssPath, out string) error {
+	cp(cssPath, filepath.Join(out, filepath.Base(cssPath)))
 	return dumpCategory(c, out)
 }
 
