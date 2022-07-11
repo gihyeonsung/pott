@@ -7,13 +7,14 @@ import (
 )
 
 func dump(c *category, cssPath, out string) error {
+	os.MkdirAll(out, 0777)
 	css, err := os.ReadFile(cssPath)
 	if err != nil {
 		return err
 	}
 
 	cssPathOut := filepath.Join(out, filepath.Base(cssPath))
-	if err := os.WriteFile(cssPathOut, []byte(css), 0777); err != nil {
+	if err := os.WriteFile(cssPathOut, []byte(css), 0666); err != nil {
 		return err
 	}
 
@@ -29,7 +30,7 @@ func dumpCategory(c *category, out string) error {
 
 	for _, doc := range c.docs {
 		path := filepath.Join(dir, doc.name+".html")
-		if err := os.WriteFile(path, []byte(doc.content), 0777); err != nil {
+		if err := os.WriteFile(path, []byte(doc.content), 0666); err != nil {
 			return err
 		}
 	}
