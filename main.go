@@ -38,6 +38,7 @@ type document struct {
 
 type file struct {
 	name string
+	raw  []byte
 }
 
 func main() {

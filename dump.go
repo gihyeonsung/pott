@@ -49,6 +49,13 @@ func dumpCategory(c *category, out string) error {
 		}
 	}
 
+	for _, f := range c.files {
+		path := filepath.Join(out, f.name)
+		if err := os.WriteFile(path, f.raw, 0666); err != nil {
+			return err
+		}
+	}
+
 	for _, i := range c.inners {
 		if err := dumpCategory(i, filepath.Join(out, i.name)); err != nil {
 			return err

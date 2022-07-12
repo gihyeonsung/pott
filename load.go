@@ -60,18 +60,15 @@ func mount(c *category, root string, paths []string) error {
 			cur = cur.getInner(dir)
 		}
 
-		if filepath.Ext(base) == ".md" {
-			raw, err := os.ReadFile(filepath.Join(root, p))
-			if err != nil {
-				return err
-			}
+		raw, err := os.ReadFile(filepath.Join(root, p))
+		if err != nil {
+			return err
+		}
 
-			cur.docs = append(cur.docs, &document{
-				name: strings.TrimSuffix(base, ".md"),
-				raw:  raw,
-			})
+		if filepath.Ext(base) == ".md" {
+			cur.docs = append(cur.docs, &document{name: strings.TrimSuffix(base, ".md"), raw: raw})
 		} else {
-			cur.files = append(cur.files, &file{name: base})
+			cur.files = append(cur.files, &file{name: base, raw: raw})
 		}
 	}
 
