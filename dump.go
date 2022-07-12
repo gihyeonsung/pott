@@ -44,7 +44,7 @@ func dumpCategory(c *category, out string) error {
 
 	for _, d := range c.docs {
 		path := filepath.Join(out, d.name)
-		if err := os.WriteFile(path, []byte(d.rendered), 0666); err != nil {
+		if err := os.WriteFile(path+".html", []byte(d.rendered), 0666); err != nil {
 			return err
 		}
 	}
