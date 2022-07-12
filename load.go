@@ -3,10 +3,13 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
-func list(root string) ([]string, error) {
+func list(root string, ignores []string) ([]string, error) {
 	var paths []string
 	walker := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -19,6 +22,19 @@ func list(root string) ([]string, error) {
 
 		if path == root {
 			return nil
+		}
+
+		path = strings.TrimPrefix(path, root+"/")
+		log.Info(path)
+		for _, ignore := range ignores {
+			match, err := regexp.Match(ignore, []byte(path))
+			if err != nil {
+				return err
+			}
+
+			if match {
+				return nil
+			}
 		}
 
 		paths = append(paths, path)
@@ -61,7 +77,8 @@ func mount(c *category, root string, paths []string) error {
 func load(root string) (*category, error) {
 	c := &category{name: "/"}
 
-	paths, err := list(root)
+	ignores := []string{`\.git.*`, `\.github.*`}
+	paths, err := list(root, ignores)
 	if err != nil {
 		return nil, err
 	}
