@@ -14,11 +14,10 @@ import (
 )
 
 type layoutParams struct {
-	Title      string
-	Date       string
-	IsCategory bool
-	Children   []string
-	Body       template.HTML
+	Title    string
+	Date     string
+	Children []string
+	Body     template.HTML
 }
 
 func build(c *category, layoutPath, cssPath string) error {
@@ -52,9 +51,8 @@ func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
 
 	var rendered strings.Builder
 	err := tmpl.Execute(&rendered, &layoutParams{
-		Title:      c.name,
-		IsCategory: true,
-		Children:   children,
+		Title:    c.name,
+		Children: children,
 	})
 	if err != nil {
 		return err

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  {{ if .IsCategory }}
+  {{ if (gt (len .Children) 0) }}
     <h1>{{ .Title }}</h1>
     <p>
       <ul>
