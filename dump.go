@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path/filepath"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func cp(src, dst string) error {
@@ -29,7 +30,7 @@ func dump(c *category, cssPath, out string) error {
 }
 
 func dumpCategory(c *category, out string) error {
-	log.Printf("write: dumping c=%+v out=%+v", c, out)
+	log.WithField("c.name", c.name).Info("dump")
 
 	dir := filepath.Join(out, c.name)
 	if err := os.MkdirAll(dir, 0777); err != nil {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"html/template"
-	"log"
 	"os"
 	"strings"
 
@@ -11,6 +10,8 @@ import (
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type layoutParams struct {
@@ -35,7 +36,7 @@ func build(c *category, layoutPath, cssPath string) error {
 }
 
 func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
-	log.Printf("buildCategory: building c.name=%+v", c.name)
+	log.WithField("c.name", c.name).Info("build")
 
 	// index
 	children := []string{".", ".."}
@@ -77,7 +78,7 @@ func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
 }
 
 func buildDocument(d *document, tmpl *template.Template, css string) error {
-	log.Printf("buildDocument: building d.name=%+v", d.name)
+	log.WithField("d.name", d.name).Info("build")
 
 	markdown := goldmark.New(goldmark.WithExtensions(meta.Meta))
 	ctx := parser.NewContext()

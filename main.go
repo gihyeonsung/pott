@@ -74,19 +74,23 @@ func main() {
 	pathBuild := flag.String("output", "build", "output location")
 	pathLayout := flag.String("template", "layout.tmpl", "template location")
 	pathCss := flag.String("stylesheet", "index.css", "stylesheet location")
-	log.Printf("main: flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
+	log.WithFields(log.Fields{
+		"pathContent": pathContent,
+		"pathBuild":   pathBuild,
+		"pathLayout":  pathLayout,
+		"pathCss":     pathCss,
+	}).Info("config flags")
 
 	c, err := load(*pathContent)
 	if err != nil {
-		log.Panicf("main: %+v", err.Error())
+		log.Panicf("%+v", err.Error())
 	}
 
 	if err := build(c, *pathLayout, *pathCss); err != nil {
-		log.Panicf("main: %+v", err.Error())
+		log.Panicf("%+v", err.Error())
 	}
 
 	if err := dump(c, *pathCss, *pathBuild); err != nil {
-		log.Panicf("main: %+v", err.Error())
+		log.Panicf("%+v", err.Error())
 	}
-	log.Printf("all processes complete")
 }

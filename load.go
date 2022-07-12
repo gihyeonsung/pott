@@ -1,17 +1,17 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func load(root string) (*category, error) {
 	rootCategory := &category{name: "/"}
-
 	rootAbs, _ := filepath.Abs(root)
-	log.Printf("load: rootAbs=%+v", rootAbs)
+	log.Debug("root=%+v", rootAbs)
 
 	reader :=
 		func(path string, info os.FileInfo, err error) error {
@@ -29,7 +29,7 @@ func load(root string) (*category, error) {
 			dirs := names[:len(names)-1]
 			base := names[len(names)-1]
 
-			log.Printf("load: path=%+v dirs=%+v, base=%+v", path, dirs, base)
+			log.WithField("pathRel", pathRel).Info("load")
 			if info.IsDir() {
 				rootCategory.insertCategory(dirs, base)
 			} else if filepath.Ext(base) == ".md" {
