@@ -91,11 +91,17 @@ func buildDocument(d *document, tmpl *template.Template, css string) error {
 			d.title = string(node.Text(d.raw))
 		}
 	}
+	if d.title == "" {
+		log.WithField("d.name", d.name).Warn("no title")
+	}
 
 	if date, ok := metadata["date"]; ok {
 		if date, ok := date.(string); ok {
 			d.date = date
 		}
+	}
+	if d.date == "" {
+		log.WithField("d.name", d.name).Warn("no date")
 	}
 
 	var body strings.Builder
