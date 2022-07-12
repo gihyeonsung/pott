@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type category struct {
