@@ -61,7 +61,11 @@ func mount(c *category, root string, paths []string) error {
 		}
 
 		if filepath.Ext(base) == ".md" {
-			raw, _ := os.ReadFile(p)
+			raw, err := os.ReadFile(filepath.Join(root, p))
+			if err != nil {
+				return err
+			}
+
 			cur.docs = append(cur.docs, &document{
 				name: strings.TrimSuffix(base, ".md"),
 				raw:  raw,
