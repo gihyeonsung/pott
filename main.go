@@ -28,34 +28,6 @@ func (c *category) getInner(name string) *category {
 	return inner
 }
 
-func (c *category) insertCategory(dirs []string, n string) {
-	// log.Printf("insertCategory: dirs=%+v n=%+v", dirs, n)
-	cur := c
-	for _, dir := range dirs {
-		cur = cur.getInner(dir)
-	}
-
-	cur.inners = append(cur.inners, &category{name: n})
-}
-
-func (c *category) insertDoc(dirs []string, d *document) {
-	// log.Printf("insertDoc: dirs=%+v d=%+v", dirs, d)
-	cur := c
-	for _, dir := range dirs {
-		cur = cur.getInner(dir)
-	}
-	cur.docs = append(cur.docs, d)
-}
-
-func (c *category) insertFile(dirs []string, f *file) {
-	// log.Printf("insertDoc: dirs=%+v f=%+v", dirs, f)
-	cur := c
-	for _, dir := range dirs {
-		cur = cur.getInner(dir)
-	}
-	cur.files = append(cur.files, f)
-}
-
 type document struct {
 	name     string
 	raw      []byte
