@@ -35,8 +35,7 @@ func (c *category) insertCategory(dirs []string, n string) {
 		cur = cur.getInner(dir)
 	}
 
-	inner := &category{name: n}
-	cur.inners = append(cur.inners, inner)
+	cur.inners = append(cur.inners, &category{name: n})
 }
 
 func (c *category) insertDoc(dirs []string, d *document) {
