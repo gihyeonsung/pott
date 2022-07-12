@@ -41,7 +41,7 @@ func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
 	// index
 	children := []string{".", ".."}
 	for _, i := range c.inners {
-		children = append(children, i.name)
+		children = append(children, i.name+"/")
 	}
 	for _, d := range c.docs {
 		children = append(children, d.name)

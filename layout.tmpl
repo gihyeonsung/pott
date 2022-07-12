@@ -9,14 +9,6 @@
 </head>
 
 <body>
-  {{ if (ne .Date "") }}
-    <p>{{.Date}}</p>
-  {{ end }}
-
-  {{ if (ne .Body "" )}}
-    {{.Body}}
-  {{ end }}
-
   {{ if .IsCategory }}
     <h1>{{ .Title }}</h1>
     <p>
@@ -26,6 +18,12 @@
         {{ end }}
       </ul>
     </p>
+  {{ else }}
+    {{ if (ne .Date "") }}
+      <p>{{.Date}}</p>
+    {{ end }}
+
+    {{.Body}}
   {{ end }}
 </body>
 
