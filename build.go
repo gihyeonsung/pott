@@ -46,8 +46,8 @@ func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
 	for _, d := range c.docs {
 		children = append(children, d.name)
 	}
-	for _, f := range c.files {
-		children = append(children, f.name)
+	for _, b := range c.blobs {
+		children = append(children, b.name)
 	}
 
 	var rendered strings.Builder

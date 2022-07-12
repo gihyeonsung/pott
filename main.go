@@ -10,7 +10,7 @@ type category struct {
 	name     string
 	inners   []*category
 	docs     []*document
-	files    []*file
+	blobs    []*blob
 	rendered string
 }
 
@@ -36,7 +36,7 @@ type document struct {
 	rendered string
 }
 
-type file struct {
+type blob struct {
 	name string
 	raw  []byte
 }

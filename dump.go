@@ -49,9 +49,9 @@ func dumpCategory(c *category, out string) error {
 		}
 	}
 
-	for _, f := range c.files {
-		path := filepath.Join(out, f.name)
-		if err := os.WriteFile(path, f.raw, 0666); err != nil {
+	for _, b := range c.blobs {
+		path := filepath.Join(out, b.name)
+		if err := os.WriteFile(path, b.raw, 0666); err != nil {
 			return err
 		}
 	}
