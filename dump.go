@@ -35,15 +35,19 @@ func dumpCategory(c *category, out string) error {
 		return err
 	}
 
-	for _, doc := range c.docs {
-		path := filepath.Join(dir, doc.name+".html")
-		if err := os.WriteFile(path, []byte(doc.content), 0666); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, c.name, "index.html"), []byte(c.rendered), 0666); err != nil {
+		return err
+	}
+
+	for _, d := range c.docs {
+		path := filepath.Join(dir, d.name+".html")
+		if err := os.WriteFile(path, []byte(d.rendered), 0666); err != nil {
 			return err
 		}
 	}
 
-	for _, inner := range c.inners {
-		if err := dumpCategory(inner, dir); err != nil {
+	for _, i := range c.inners {
+		if err := dumpCategory(i, dir); err != nil {
 			return err
 		}
 	}

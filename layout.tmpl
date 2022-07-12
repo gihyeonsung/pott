@@ -5,12 +5,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="index.css" type="text/css">
-  <title>{{.Title}}</title>
+  <title>{{ .Title }}</title>
 </head>
 
 <body>
-<p>{{.Date}}</p>
-{{.Body}}
+  {{ if (ne .Date "") }}
+    <p>{{.Date}}</p>
+  {{ end }}
+
+  {{ if (ne .Body "" )}}
+    {{.Body}}
+  {{ end }}
+
+  {{ if .IsCategory }}
+    <h1>{{ .Title }}</h1>
+    <p>
+      <ul>
+        {{ range $i, $c := .Children }}
+          <li><a href="{{ $c }}">{{ $c }}</a></li>
+        {{ end }}
+      </ul>
+    </p>
+  {{ end }}
 </body>
 
 </html>

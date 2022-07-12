@@ -6,11 +6,12 @@ import (
 )
 
 type category struct {
-	name   string
-	outer  *category
-	inners []*category
-	docs   []*document
-	files  []*file
+	name     string
+	outer    *category
+	inners   []*category
+	docs     []*document
+	files    []*file
+	rendered string
 }
 
 func (c *category) getInner(name string) *category {
@@ -57,11 +58,11 @@ func (c *category) insertFile(dirs []string, f *file) {
 }
 
 type document struct {
-	name    string
-	raw     []byte
-	title   string
-	content string
-	date    string
+	name     string
+	raw      []byte
+	title    string
+	date     string
+	rendered string
 }
 
 type file struct {
@@ -73,7 +74,7 @@ func main() {
 	pathBuild := flag.String("output", "build", "output location")
 	pathLayout := flag.String("template", "layout.tmpl", "template location")
 	pathCss := flag.String("stylesheet", "index.css", "stylesheet location")
-	log.Printf("flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
+	log.Printf("main: flags: *pathContent=%+v *pathBuild=%+v, *pathLayout=%+v, *pathCss=%+v", *pathContent, *pathBuild, *pathLayout, *pathCss)
 
 	c, err := load(*pathContent)
 	if err != nil {

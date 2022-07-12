@@ -13,6 +13,14 @@ import (
 	"github.com/yuin/goldmark/text"
 )
 
+type layoutParams struct {
+	Title      string
+	Date       string
+	IsCategory bool
+	Children   []string
+	Body       template.HTML
+}
+
 func build(c *category, layoutPath, cssPath string) error {
 	layout, err := os.ReadFile(layoutPath)
 	if err != nil {
@@ -28,14 +36,41 @@ func build(c *category, layoutPath, cssPath string) error {
 }
 
 func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
+	log.Printf("buildCategory: building c.name=%+v", c.name)
+
+	// index
+	children := []string{".", ".."}
 	for _, i := range c.inners {
-		if err := buildCategory(i, tmpl, cssPath); err != nil {
+		children = append(children, i.name)
+	}
+	for _, d := range c.docs {
+		children = append(children, d.name)
+	}
+	for _, f := range c.files {
+		children = append(children, f.name)
+	}
+
+	var rendered strings.Builder
+	err := tmpl.Execute(&rendered, &layoutParams{
+		Title:      c.name,
+		IsCategory: true,
+		Children:   children,
+	})
+	if err != nil {
+		return err
+	}
+	c.rendered = rendered.String()
+
+	// docs
+	for _, d := range c.docs {
+		if err := buildDocument(d, tmpl, cssPath); err != nil {
 			return err
 		}
 	}
 
-	for _, d := range c.docs {
-		if err := buildDocument(d, tmpl, cssPath); err != nil {
+	// inner cats
+	for _, i := range c.inners {
+		if err := buildCategory(i, tmpl, cssPath); err != nil {
 			return err
 		}
 	}
@@ -67,17 +102,16 @@ func buildDocument(d *document, tmpl *template.Template, css string) error {
 	var body strings.Builder
 	markdown.Renderer().Render(&body, d.raw, parsed)
 
-	var content strings.Builder
-	tmpl.Execute(&content, &struct {
-		Title string
-		Date  string
-		Body  template.HTML
-	}{
+	var rendered strings.Builder
+	err := tmpl.Execute(&rendered, &layoutParams{
 		Title: d.title,
 		Date:  d.date,
 		Body:  template.HTML(body.String()),
 	})
-	d.content = content.String()
+	if err != nil {
+		return err
+	}
+	d.rendered = rendered.String()
 
 	return nil
 }
