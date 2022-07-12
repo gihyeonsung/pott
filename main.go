@@ -7,7 +7,6 @@ import (
 
 type category struct {
 	name     string
-	outer    *category
 	inners   []*category
 	docs     []*document
 	files    []*file
@@ -23,7 +22,7 @@ func (c *category) getInner(name string) *category {
 	}
 
 	// if not found, create and returns new one
-	inner := &category{name: name, outer: c}
+	inner := &category{name: name}
 	c.inners = append(c.inners, inner)
 	return inner
 }
@@ -35,7 +34,7 @@ func (c *category) insertCategory(dirs []string, n string) {
 		cur = cur.getInner(dir)
 	}
 
-	inner := &category{name: n, outer: cur}
+	inner := &category{name: n}
 	cur.inners = append(cur.inners, inner)
 }
 
