@@ -34,7 +34,7 @@ func load(root string) (*category, error) {
 				rootCategory.insertCategory(dirs, base)
 			} else if filepath.Ext(base) == ".md" {
 				d := &document{}
-				d.name = base
+				d.name = strings.TrimSuffix(base, ".md")
 				d.raw, _ = os.ReadFile(path)
 				rootCategory.insertDoc(dirs, d)
 			} else {

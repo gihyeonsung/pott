@@ -35,12 +35,12 @@ func dumpCategory(c *category, out string) error {
 	if err := os.MkdirAll(dir, 0777); err != nil {
 		return err
 	}
-	if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte(c.rendered), 0666); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "index"), []byte(c.rendered), 0666); err != nil {
 		return err
 	}
 
 	for _, d := range c.docs {
-		path := filepath.Join(dir, d.name+".html")
+		path := filepath.Join(dir, d.name)
 		if err := os.WriteFile(path, []byte(d.rendered), 0666); err != nil {
 			return err
 		}
