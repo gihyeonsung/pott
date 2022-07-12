@@ -30,25 +30,27 @@ func dump(c *category, cssPath, out string) error {
 }
 
 func dumpCategory(c *category, out string) error {
-	log.WithField("c.name", c.name).Info("dump")
+	log.WithFields(log.Fields{
+		"c.name": c.name,
+		"out":    out,
+	}).Info("dump")
 
-	dir := filepath.Join(out, c.name)
-	if err := os.MkdirAll(dir, 0777); err != nil {
+	if err := os.MkdirAll(out, 0777); err != nil {
 		return err
 	}
-	if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte(c.rendered), 0666); err != nil {
+	if err := os.WriteFile(filepath.Join(out, "index.html"), []byte(c.rendered), 0666); err != nil {
 		return err
 	}
 
 	for _, d := range c.docs {
-		path := filepath.Join(dir, d.name)
+		path := filepath.Join(out, d.name)
 		if err := os.WriteFile(path, []byte(d.rendered), 0666); err != nil {
 			return err
 		}
 	}
 
 	for _, i := range c.inners {
-		if err := dumpCategory(i, dir); err != nil {
+		if err := dumpCategory(i, filepath.Join(out, i.name)); err != nil {
 			return err
 		}
 	}
