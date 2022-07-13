@@ -1,8 +1,8 @@
 body {
   font-family: sans-serif;
-  line-height: 1.8rem;
-  margin: 2rem;
-  max-width: 24rem;
+  font-size: 14pt;
+  margin: 2em;
+  max-width: 24em;
   text-align: justify;
 }
 
