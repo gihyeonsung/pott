@@ -1,9 +1,15 @@
 package main
 
 import (
-	"flag"
-
 	log "github.com/sirupsen/logrus"
+)
+
+var (
+	pathContent = "content"
+	pathBuild   = "build"
+	pathLayout  = "layout.tmpl"
+	pathCss     = "index.css"
+	ignores     = []string{`\.git.*`, `\.github.*`}
 )
 
 type category struct {
@@ -42,27 +48,16 @@ type blob struct {
 }
 
 func main() {
-	pathContent := flag.String("content", "content", "contents location")
-	pathBuild := flag.String("output", "build", "output location")
-	pathLayout := flag.String("template", "layout.tmpl", "template location")
-	pathCss := flag.String("stylesheet", "index.css", "stylesheet location")
-	log.WithFields(log.Fields{
-		"pathContent": pathContent,
-		"pathBuild":   pathBuild,
-		"pathLayout":  pathLayout,
-		"pathCss":     pathCss,
-	}).Info("config flags")
-
-	c, err := load(*pathContent)
+	c, err := load(pathContent)
 	if err != nil {
 		log.Panicf("%+v", err.Error())
 	}
 
-	if err := build(c, *pathLayout, *pathCss); err != nil {
+	if err := build(c, pathLayout, pathCss); err != nil {
 		log.Panicf("%+v", err.Error())
 	}
 
-	if err := dump(c, *pathCss, *pathBuild); err != nil {
+	if err := dump(c, pathCss, pathBuild); err != nil {
 		log.Panicf("%+v", err.Error())
 	}
 }

@@ -76,14 +76,12 @@ func mount(c *category, root string, paths []string) error {
 }
 
 func load(root string) (*category, error) {
-	c := &category{name: "/"}
-
-	ignores := []string{`\.git.*`, `\.github.*`}
 	paths, err := list(root, ignores)
 	if err != nil {
 		return nil, err
 	}
 
+	c := &category{name: "/"}
 	if err := mount(c, root, paths); err != nil {
 		return nil, err
 	}
