@@ -4,10 +4,9 @@ import (
 	"html/template"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark-meta"
-	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
 
 	log "github.com/sirupsen/logrus"
@@ -79,19 +78,8 @@ func buildCategory(c *category, tmpl *template.Template, cssPath string) error {
 func buildDocument(d *document, tmpl *template.Template, css string) error {
 	log.WithField("d.name", d.name).Info("build")
 
-	markdown := goldmark.New(goldmark.WithExtensions(meta.Meta))
-	ctx := parser.NewContext()
-	parsed := markdown.Parser().Parse(text.NewReader(d.raw), parser.WithContext(ctx))
-	metadata := meta.Get(ctx)
-
-	if date, ok := metadata["date"]; ok {
-		if date, ok := date.(string); ok {
-			d.date = date
-		}
-	}
-	if d.date == "" {
-		log.WithField("d.name", d.name).Warn("no date")
-	}
+	markdown := goldmark.New()
+	parsed := markdown.Parser().Parse(text.NewReader(d.raw))
 
 	var body strings.Builder
 	markdown.Renderer().Render(&body, d.raw, parsed)

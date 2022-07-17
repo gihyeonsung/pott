@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -66,10 +67,12 @@ func mount(c *category, root string, paths []string) error {
 		}
 
 		if filepath.Ext(base) == ".md" {
+			// FIXME: read date from git
 			d := &document{
 				name:  base,
 				raw:   raw,
 				title: strings.TrimSuffix(base, ".md"),
+				date:  time.Now().Format(time.RFC3339),
 			}
 			cur.docs = append(cur.docs, d)
 		} else {
