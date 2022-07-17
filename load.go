@@ -66,7 +66,12 @@ func mount(c *category, root string, paths []string) error {
 		}
 
 		if filepath.Ext(base) == ".md" {
-			cur.docs = append(cur.docs, &document{name: base, raw: raw})
+			d := &document{
+				name:  base,
+				raw:   raw,
+				title: base,
+			}
+			cur.docs = append(cur.docs, d)
 		} else {
 			cur.blobs = append(cur.blobs, &blob{name: base, raw: raw})
 		}

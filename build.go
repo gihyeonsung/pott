@@ -85,16 +85,6 @@ func buildDocument(d *document, tmpl *template.Template, css string) error {
 	parsed := markdown.Parser().Parse(text.NewReader(d.raw), parser.WithContext(ctx))
 	metadata := meta.Get(ctx)
 
-	if parsed.HasChildren() {
-		node := parsed.FirstChild()
-		if node.Kind() == ast.KindHeading {
-			d.title = string(node.Text(d.raw))
-		}
-	}
-	if d.title == "" {
-		log.WithField("d.name", d.name).Warn("no title")
-	}
-
 	if date, ok := metadata["date"]; ok {
 		if date, ok := date.(string); ok {
 			d.date = date
