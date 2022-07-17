@@ -69,7 +69,7 @@ func mount(c *category, root string, paths []string) error {
 			d := &document{
 				name:  base,
 				raw:   raw,
-				title: base,
+				title: strings.TrimSuffix(base, ".md"),
 			}
 			cur.docs = append(cur.docs, d)
 		} else {
