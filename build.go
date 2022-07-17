@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/text"
