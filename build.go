@@ -7,7 +7,6 @@ import (
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-meta"
-	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
 
