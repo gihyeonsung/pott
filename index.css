@@ -3,7 +3,6 @@ body {
   font-size: 14pt;
   margin: 2em;
   max-width: 24em;
-  text-align: justify;
 }
 
 @media (prefers-color-scheme: dark) {
